@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use App\Barcode;
 use Keygen;
 
@@ -14,6 +15,14 @@ class BarcodeController extends Controller
     	{
     		$barcodes = Barcode::whereEmail($email)->first();
     		//return 
+    		$barcode = $barcodes->ebib;
+
+    		$data = $barcode;
+			$to = $email;
+		    $from = Config::get('constants.emailSetup.user');
+		    $subject = 'Your marathon barcode is';
+			$this->emailBibToUser($to, $from, $subject, $data, 'emails.barcode');
+			$this->emailBibToAdmin($from, $from, $subject, $data, 'emails.barcode');
     		return response()->json([
     				'data' => $barcodes,
     			], 200);
@@ -25,6 +34,12 @@ class BarcodeController extends Controller
     		$data['barcode'] = $ebib;
     		if($barcodes = Barcode::create($data)){
     			// return here 
+    			$data = $ebib;
+    			$to = $email;
+			    $from = Config::get('constants.emailSetup.user');
+			    $subject = 'Your marathon barcode is';
+    			$this->emailBibToUser($to, $from, $subject, $data, 'emails.barcode');
+    			$this->emailBibToAdmin($from, $from, $subject, $data, 'emails.barcode');
     			return response()->json([
     				'data' => $barcodes,
     			], 200);

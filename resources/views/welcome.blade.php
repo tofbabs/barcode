@@ -56,11 +56,11 @@
             </div>
             
             <div class="bib-number">
-                <p>12345</p>
+                <p>{{$barcode}}</p>
                 
             </div>
             <div class="bib-code">
-                <p>{!! DNS1D::getBarcodeHTML("1223", "C128B"); !!}</p>
+                <p>{!! DNS1D::getBarcodeHTML("$barcode", "C128B"); !!}</p>
             </div>
 
             <div class="bottom-banner">

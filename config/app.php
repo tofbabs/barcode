@@ -234,5 +234,4 @@ return [
         'Keygen' => Keygen\Keygen::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
-
 ];

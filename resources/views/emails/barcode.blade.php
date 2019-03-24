@@ -1,16 +1,6 @@
 <!doctype html>
-<html lang="{{ app()->getLocale() }}">
+<html>
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Laravel</title>
-
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
-        <!-- Styles -->
         <style>
             .centralised {
                 background-color: white;
@@ -56,11 +46,11 @@
             </div>
             
             <div class="bib-number">
-                <p>{{$barcode}}</p>
+                <p>{{$data}}</p>
                 
             </div>
             <div class="bib-code">
-                <p>{!! DNS1D::getBarcodeHTML("$barcode", "C128B"); !!}</p>
+                <p>{!! DNS1D::getBarcodeHTML("$data", "C128B"); !!}</p>
             </div>
 
             <div class="bottom-banner">
