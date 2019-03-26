@@ -2,6 +2,6 @@
 
 return [
     'emailSetup' => [
-        'user' => 'evictor.alagwu@tm30.net'
+        'user' => 'eko.5samuel@gmail.com'
     ]
 ];

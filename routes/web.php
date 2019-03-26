@@ -13,5 +13,7 @@
 
 
 
-Route::get('/', function () {
+Route::get('/', 'BarcodeController@index');
+Route::get('/get', function() {
+	return view('welcome');
 });

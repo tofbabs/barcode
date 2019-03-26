@@ -4,11 +4,34 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
 use App\Barcode;
 use Keygen;
+use App;
+use PDF;
+use Mail;
 
 class BarcodeController extends Controller
 {
+	public function index() {
+		
+
+		$data = ['barcode' => 12345];
+
+		$pdf = PDF::loadView('welcome', $data);
+
+		Mail::send('emails.test', $data, function($message) use($pdf)
+		{
+		    $message->from('eko.5samuel@gmail.com', 'Your Name');
+
+		    $message->to('eko.5samuel@gmail.com')->subject('Invoice');
+
+		    $message->attachData($pdf->output(), "invoice.pdf");
+		});
+
+
+	}
+
     public function show($userId, $email)
     {
     	if(Barcode::whereEmail($email)->exists())
