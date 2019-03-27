@@ -45,13 +45,11 @@ class BarcodeController extends Controller
     		$barcodes = Barcode::whereEmail($email)->first();
     		//return 
     		$barcode = $barcodes->ebib;
+    		$email = $barcode->email;
 
-    		$data = $barcode;
-			$to = $email;
-		    $from = Config::get('constants.emailSetup.user');
-		    $subject = 'Your marathon barcode is';
-			$this->emailBibToUser($to, $from, $subject, $data, 'emails.barcode');
-			$this->emailBibToAdmin($from, $from, $subject, $data, 'emails.barcode');
+    		$this->sendUserEbibPDF($email, $barcode);
+    		$this->sendAdminEbibPDF($email, $barcode);
+
     		return response()->json([
     				'data' => $barcodes,
     			], 200);
@@ -63,17 +61,50 @@ class BarcodeController extends Controller
     		$data['barcode'] = $ebib;
     		if($barcodes = Barcode::create($data)){
     			// return here 
-    			$data = $ebib;
-    			$to = $email;
-			    $from = Config::get('constants.emailSetup.user');
-			    $subject = 'Your marathon barcode is';
-    			$this->emailBibToUser($to, $from, $subject, $data, 'emails.barcode');
-    			$this->emailBibToAdmin($from, $from, $subject, $data, 'emails.barcode');
+    			$email = $barcodes->email;
+    			$barcode = $barcodes->barcode;
+    			$this->sendUserEbibPDF($email, $barcode);
+    			$this->sendAdminEbibPDF($email, $barcode);
     			return response()->json([
     				'data' => $barcodes,
     			], 200);
     		}
     	}
+    }
+
+    public function sendUserEbibPDF($email, $barcode)
+    {
+    	$data = ['barcode' => $barcode];
+
+		$pdf = PDF::loadView('pdf.ebib', $data);
+
+		Mail::send('emails.user', $data, function($message) use($pdf, $email)
+		{
+			$from = Config::get('constants.emailSetup.user');
+
+		    $message->from($from, 'Access Bank Lagos Marathon');
+
+		    $message->to($email)->subject('Lagos Marathon');
+
+		    $message->attachData($pdf->output(), "marathon.pdf");
+		});
+    }
+
+    public function sendAdminEbibPDF($email, $barcode)
+    {
+    	$data = ['barcode' => $barcode, 'bars' => $email];
+
+		$pdf = PDF::loadView('pdf.ebib', $data);
+
+		Mail::send('emails.admin', $data, function($message) use($pdf, $email)
+		{
+			$from = Config::get('constants.emailSetup.user');
+		    $message->from($from, 'Access Bank Lagos Marathon');
+
+		    $message->to($from)->subject('Lagos Marathon');
+
+		    $message->attachData($pdf->output(), "marathon.pdf");
+		});
     }
 
 	protected function generateNumericKey()
