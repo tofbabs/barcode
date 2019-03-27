@@ -32,6 +32,12 @@ class BarcodeController extends Controller
 
 	}
 
+	public function test()
+	{
+		$pdf = PDF::loadView('welcome', ['barcode' => 12345]);
+		return $pdf->stream('invoice.pdf');	
+	}
+
     public function show($userId, $email)
     {
     	if(Barcode::whereEmail($email)->exists())

@@ -6,14 +6,17 @@
         </style>
     </head>
     <body>
-        <div style="max-width: 600px">
+        <div style="position:absolute;
+            left:40%;
+            top: 30%;
+            transform: translate(-50%,-50%);">
             <div class="top-banner">
                 <img src="images/marathon1.png" alt="Marathon">
-                <p style="font-size: 230px; margin-top: -30px;margin-bottom: -30px;">56875</p>
-                <span style="float:right; margin-bottom: 15px; margin-right: 30px;">{!! DNS1D::getBarcodeHTML("56875", "C128B"); !!}</span>
+                <span style="font-size: 230px;">56875</span>
+                <span style="float:right; margin-top: 230px; margin-right: 40px;">{!! DNS1D::getBarcodeHTML("56875", "C128B"); !!}</span>
             </div>
             <div class="bottom-banner">
-                <img src="/images/marathon2.png" alt="Marathon">
+                <img src="images/marathon2.png" alt="Marathon">
             </div>
         </div>
     </body>

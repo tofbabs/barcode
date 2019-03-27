@@ -14,6 +14,7 @@
 
 
 Route::get('/', 'BarcodeController@index');
+Route::get('/test', 'BarcodeController@test');
 Route::get('/get', function() {
 	return view('welcome');
 });
