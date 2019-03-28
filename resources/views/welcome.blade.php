@@ -8,7 +8,7 @@
     <body>
         <div style="position:absolute;
             left:40%;
-            top: 30%;
+            top: 50%;
             transform: translate(-50%,-50%);">
             <div class="top-banner">
                 <img src="images/marathon1.png" alt="Marathon">

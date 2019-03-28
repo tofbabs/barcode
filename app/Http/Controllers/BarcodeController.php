@@ -34,8 +34,11 @@ class BarcodeController extends Controller
 
 	public function test()
 	{
-		$pdf = PDF::loadView('welcome', ['barcode' => 12345]);
-		return $pdf->stream('invoice.pdf');	
+	    $barcode = 12345;
+		$pdf = PDF::loadView('welcome', ['barcode' => 12345])
+            ->setPaper('a5', 'landscape')
+            ->save(public_path('pdf/'.$barcode.'.pdf'));
+		return $pdf->stream('invoice.pdf');
 	}
 
     public function show($userId, $email)
@@ -134,4 +137,12 @@ class BarcodeController extends Controller
 	{
 		return view('barcode')->with('barcode', $ebib);
 	}
+
+	public function invoice()
+    {
+//        return view('invoice.test');
+        $pdf = PDF::loadView('invoice.test')
+                ->setPaper('a4');
+        return $pdf->stream('invoice.pdf');
+    }
 }
