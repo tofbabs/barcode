@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
 
 
 

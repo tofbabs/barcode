@@ -45,7 +45,7 @@ class BarcodeController extends Controller
     		$barcodes = Barcode::whereEmail($email)->first();
     		//return 
     		$barcode = $barcodes->ebib;
-    		$email = $barcode->email;
+    		$email = $barcodes->email;
 
     		$this->sendUserEbibPDF($email, $barcode);
     		$this->sendAdminEbibPDF($email, $barcode);
