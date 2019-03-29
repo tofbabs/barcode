@@ -17,8 +17,8 @@ class CreateBarcodesTable extends Migration
             $table->increments('id');
             $table->string('email');
             $table->string('phone')->nullable();
-            $table->string('reference');
-            $table->string('amount');
+            $table->string('reference')->nullable();
+            $table->string('amount')->nullable();
             $table->string('barcode');
             $table->integer('ebib');
             $table->timestamps();
