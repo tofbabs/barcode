@@ -18,4 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('barcode/{userId}/{enail}', 'BarcodeController@show');
+Route::post('barcode', 'BarcodeController@show');

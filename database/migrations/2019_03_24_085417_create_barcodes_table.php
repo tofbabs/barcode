@@ -15,9 +15,10 @@ class CreateBarcodesTable extends Migration
     {
         Schema::create('barcodes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
             $table->string('email');
             $table->string('phone')->nullable();
+            $table->string('reference');
+            $table->string('amount');
             $table->string('barcode');
             $table->integer('ebib');
             $table->timestamps();

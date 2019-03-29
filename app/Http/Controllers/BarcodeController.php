@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use App\Barcode;
+use Illuminate\Validation\ValidationException;
 use Keygen;
 use App;
 use PDF;
@@ -34,52 +35,73 @@ class BarcodeController extends Controller
 
 	public function test()
 	{
-	    $barcode = 12345;
-		$pdf = PDF::loadView('welcome', ['barcode' => 12345])
+	    $barcode = 22345;
+		$pdf = PDF::loadView('pdf.ebib', ['barcode' => $barcode])
             ->setPaper('a5', 'landscape')
-            ->save(public_path('pdf/'.$barcode.'.pdf'));
+            ->save(storage_path('app/public/pdf/'.$barcode.'.pdf'));
 		return $pdf->stream('invoice.pdf');
 	}
 
-    public function show($userId, $email)
+    public function show()
     {
-    	if(Barcode::whereEmail($email)->exists())
-    	{
-    		$barcodes = Barcode::whereEmail($email)->first();
-    		//return 
-    		$barcode = $barcodes->ebib;
-    		$email = $barcodes->email;
+        try {
+            $rule = $this->getRule();
+            request()->validate($rule);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'errors' => $e->errors(),
+                'message' => $e->getMessage()
+            ], 422);
+        }
 
-    		$this->sendUserEbibPDF($email, $barcode);
-    		$this->sendAdminEbibPDF($email, $barcode);
-
-    		return response()->json([
-    				'data' => $barcodes,
-    			], 200);
-    	} else {
-    		$ebib = $this->generateID();
-    		$data['email'] = $email;
-    		$data['user_id'] = $userId;
-    		$data['ebib'] = $ebib;
-    		$data['barcode'] = $ebib;
-    		if($barcodes = Barcode::create($data)){
-    			// return here 
-    			$email = $barcodes->email;
-    			$barcode = $barcodes->barcode;
-    			$this->sendUserEbibPDF($email, $barcode);
-    			$this->sendAdminEbibPDF($email, $barcode);
-    			return response()->json([
-    				'data' => $barcodes,
-    			], 200);
-    		}
-    	}
+        try {
+            $email = request()->email;
+            if(Barcode::whereEmail($email)->exists())
+            {
+                $barcodes = Barcode::whereEmail($email)->first();
+                $barcode = $barcodes->ebib;
+                $email = $barcodes->email;
+                if (request()->isRequestEmail === 1)
+                {
+                    $this->sendUserEbibPDF($email, $barcode);
+                    $this->sendAdminEbibPDF($email, $barcode);
+                    return response()->json([
+                        'data' => $barcodes,
+                    ], 200);
+                } else {
+                    return response()->json([
+                        'data' => $barcodes->barcode
+                    ], 200);
+                }
+            } else {
+                $ebib = $this->generateID();
+                $data['email'] = request()->email;
+                $data['ebib'] = $ebib;
+                $data['barcode'] = 'app/public/pdf/'.$ebib.'.pdf';
+                if($barcodes = Barcode::create($data)){
+                    $email = $barcodes->email;
+                    $barcode = $barcodes->ebib;
+                    $this->getStoredPDF($barcode);
+                    $this->sendUserEbibPDF($email, $barcode);
+                    $this->sendAdminEbibPDF($email, $barcode);
+                    return response()->json([
+                        'data' => $barcodes,
+                    ], 200);
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'errors' => $e->getMessage(),
+            ], 403);
+        }
     }
 
     public function sendUserEbibPDF($email, $barcode)
     {
     	$data = ['barcode' => $barcode];
 
-		$pdf = PDF::loadView('pdf.ebib', $data);
+		$pdf = PDF::loadView('pdf.ebib', $data)
+                    ->setPaper('a5', 'landscape');
 
 		Mail::send('emails.user', $data, function($message) use($pdf, $email)
 		{
@@ -97,7 +119,8 @@ class BarcodeController extends Controller
     {
     	$data = ['barcode' => $barcode, 'bars' => $email];
 
-		$pdf = PDF::loadView('pdf.ebib', $data);
+		$pdf = PDF::loadView('pdf.ebib', $data)
+                    ->setPaper('a5', 'landscape');
 
 		Mail::send('emails.admin', $data, function($message) use($pdf, $email)
 		{
@@ -113,7 +136,7 @@ class BarcodeController extends Controller
 	protected function generateNumericKey()
 	{
 	    // prefixes the key with a random integer between 1 - 9 (inclusive)
-	    return Keygen::numeric(5)
+	    return Keygen::numeric(4)
 	    ->prefix(mt_rand(1, 9))
 	    ->generate(true);
 	}
@@ -144,5 +167,20 @@ class BarcodeController extends Controller
         $pdf = PDF::loadView('invoice.test')
                 ->setPaper('a4');
         return $pdf->stream('invoice.pdf');
+    }
+
+    public function getStoredPDF($barcode)
+    {
+        return PDF::loadView('pdf.ebib', ['barcode' => $barcode])
+            ->setPaper('a5', 'landscape')
+            ->save(storage_path('app/public/pdf/'.$barcode.'.pdf'));
+    }
+
+    public function getRule()
+    {
+        return [
+            'email' => 'required|email',
+            'isRequestEmail' => 'required|boolean'
+        ];
     }
 }
