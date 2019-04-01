@@ -101,7 +101,7 @@ class BarcodeController extends Controller
         $pdf = PDF::loadView('pdf.ebib', $data)
             ->setPaper('a5', 'landscape');
 
-        $subject = "Hello $name, your BIB Number for the Access Bank Lagos City Marathon 2020 is $barcode";
+        $subject = "$name, Your BIB Number for the ABLCM 2020 is $barcode";
 
         Mail::send('emails.user', $data, function ($message) use ($pdf, $email, $subject) {
 
