@@ -2,6 +2,6 @@
 
 return [
     'emailSetup' => [
-        'user' => 'eko.5samuel@gmail.com'
+        'user' => 'info@accessbankmarathon.com'
     ]
 ];
