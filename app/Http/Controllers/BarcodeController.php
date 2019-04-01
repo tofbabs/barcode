@@ -86,7 +86,7 @@ class BarcodeController extends Controller
             $pdf = PDF::loadView('pdf.ebib', ['barcode' => $barcode])
                 ->setPaper('a5', 'landscape');
 
-            return response()->download($pdf->output);
+            return $pdf->stream();
 
         } catch (\Exception $e) {
             return response()->json([
