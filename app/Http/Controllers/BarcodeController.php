@@ -102,9 +102,7 @@ class BarcodeController extends Controller
         $subject = "$name, Your BIB Number for the ABLCM 2020 is $barcode";
 
         Mail::send('emails.user', $data, function ($message) use ($pdf, $email, $subject) {
-
             $from = Config::get('constants.emailSetup.user');
-
             $message->from($from, 'Access Bank Lagos Marathon');
             $message->to($email)->subject($subject);
             $message->attachData($pdf->output(), "marathon.pdf");
