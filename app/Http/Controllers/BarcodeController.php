@@ -53,8 +53,6 @@ class BarcodeController extends Controller
         $email = request()->email;
         $name = request()->name;
 
-
-
         try {
 
             if (Barcode::whereEmail($email)->exists()) {
@@ -69,7 +67,7 @@ class BarcodeController extends Controller
                 $ebib = $this->generateID();
                 $barcode = 'app/public/pdf/'.$ebib.'.pdf';
 
-                $data = compact("email", "ebib", $barcode);
+                $data = compact("email", "ebib", "barcode");
 
                 if ($barcodes = Barcode::create($data)) {
                     $barcode = $barcodes->ebib;
