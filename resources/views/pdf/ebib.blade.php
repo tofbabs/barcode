@@ -13,7 +13,7 @@
             transform: translate(-50%,-50%);">
     <div class="top-banner">
         <img src="images/marathon1.png" alt="Marathon">
-        <strong style="font-weight: 600; line-height: 1.2; font-size: 220px; font-family: Arial, Helvetica, sans-serif">{{$barcode}}</strong>
+        <strong style="font-weight: 600; line-height: 0.8; font-size: 280px; font-family: Arial, Helvetica, sans-serif">{{$barcode}}</strong>
         <div style="position: relative; margin: 20px 0; left: 80%">{!! DNS1D::getBarcodeHTML("$barcode", "C128B"); !!}</div>
     </div>
     <div class="bottom-banner">
