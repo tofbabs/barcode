@@ -12,8 +12,8 @@
             text-align: center;
             transform: translate(-50%,-50%);">
     <div class="top-banner">
-        <img width="" src="images/marathon1.png" alt="Marathon">
-        <strong style="font-size: 180px; font-family: Arial, Helvetica, sans-serif">{{$barcode}}</strong>
+        <img src="images/marathon1.png" alt="Marathon">
+        <strong style="font-weight: 600; line-height: 0.6; font-size: 180px; font-family: Arial, Helvetica, sans-serif">{{$barcode}}</strong>
         <div style="position: relative; margin: 20px 0; left: 80%">{!! DNS1D::getBarcodeHTML("$barcode", "C128B"); !!}</div>
     </div>
     <div class="bottom-banner">
