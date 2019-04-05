@@ -26,7 +26,7 @@
         <tr>
             <td colspan="3">
                 Thank you for registering for the Access Bank Lagos City Marathon 2020. We are exited to have you be a
-                part of this wonderful event. Your BIB Number is {{$barcode}} and a copy of the e-BIB is attached to this mail. Please come to the National Stadium with a printed copy of your e-BIB to collect all marathon accessories.
+                part of this wonderful event. Your BIB Number is <strong>{{$barcode}}</strong> and a copy of the e-BIB is attached to this mail. Please come to the National Stadium with a printed copy of your e-BIB to collect all marathon accessories.
             </td>
         </tr>
         <tr>
