@@ -40,18 +40,12 @@ class BarcodeController extends Controller{
         try {
 
             if (Barcode::whereEmail($email)->exists()) {
-                    $barcodes = Barcode::whereEmail($email)->first();
-                    $barcode = $barcodes->id;
-                    $email = $barcodes->email;
-                    if (request()->isRequestEmail === 1) {
-                        $this->sendUserEbibPDF($email, $barcode, $name);
-                        $this->sendAdminEbibPDF($email, $barcode);
-                    }
-                } else {
-
+                $barcodes = Barcode::whereEmail($email)->first();
+                $barcode = $barcodes->id;
+                $email = $barcodes->email;
+            } else {
                 $ebib = $this->generateID();
                 $barcode = 'app/public/pdf/'.$ebib.'.pdf';
-
                 $data = compact("email", "barcode", "ebib");
 
                 if ($barcodes = Barcode::create($data)) {
@@ -62,6 +56,11 @@ class BarcodeController extends Controller{
                     // $this->sendAdminEbibPDF($email, $barcode);
 
                 }
+            }
+
+            if (request()->isRequestEmail === 1) {
+                $this->sendUserEbibPDF($email, $barcode, $name);
+                $this->sendAdminEbibPDF($email, $barcode);
             }
 
             $pdf = PDF::loadView('pdf.ebib', ['barcode' => $barcode])
