@@ -12,25 +12,9 @@ use App;
 use PDF;
 use Mail;
 
-class BarcodeController extends Controller
-{
-    public function index()
-    {
+class BarcodeController extends Controller{
 
-
-        $data = ['barcode' => 12345];
-
-        $pdf = PDF::loadView('welcome', $data);
-
-        Mail::send('emails.test', $data, function ($message) use ($pdf) {
-            $message->from('eko.5samuel@gmail.com', 'Your Name');
-            $message->to('eko.5samuel@gmail.com')->subject('Invoice');
-            $message->attachData($pdf->output(), "invoice.pdf");
-        });
-    }
-
-    public function test()
-    {
+    public function test(){
         $barcode = 22345;
         $pdf = PDF::loadView('pdf.ebib', ['barcode' => $barcode])
             ->setPaper('a5', 'landscape')
@@ -57,26 +41,25 @@ class BarcodeController extends Controller
 
             if (Barcode::whereEmail($email)->exists()) {
                     $barcodes = Barcode::whereEmail($email)->first();
-                    $barcode = $barcodes->ebib;
+                    $barcode = $barcodes->id;
                     $email = $barcodes->email;
                     if (request()->isRequestEmail === 1) {
                         $this->sendUserEbibPDF($email, $barcode, $name);
                         $this->sendAdminEbibPDF($email, $barcode);
                     }
                 } else {
+
                 $ebib = $this->generateID();
                 $barcode = 'app/public/pdf/'.$ebib.'.pdf';
 
-                $data = compact("email", "ebib", "barcode");
+                $data = compact("email", "barcode", "ebib");
 
                 if ($barcodes = Barcode::create($data)) {
-                    $barcode = $barcodes->ebib;
-
+                    $barcode = $barcodes->id;
                     // Stores barcode to PDF 
                     $this->storePDF($barcode);
-
                     $this->sendUserEbibPDF($email, $barcode, $name);
-                    $this->sendAdminEbibPDF($email, $barcode);
+                    // $this->sendAdminEbibPDF($email, $barcode);
 
                 }
             }

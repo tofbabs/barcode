@@ -23,6 +23,9 @@ class CreateBarcodesTable extends Migration
             $table->integer('ebib');
             $table->timestamps();
         });
+
+        DB::statement("ALTER TABLE barcodes AUTO_INCREMENT = 101;");
+
     }
 
     /**
